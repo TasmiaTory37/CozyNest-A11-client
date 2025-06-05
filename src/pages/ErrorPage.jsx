@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
-import error from '../assets/error.png'; // Ensure the path is correct based on your project structure
+import error from '../assets/error.png'; 
 
 
 const ErrorPage = () => {
