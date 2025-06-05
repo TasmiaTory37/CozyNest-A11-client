@@ -1,6 +1,7 @@
 import React from 'react';
 import Banner from '../components/Banner';
 import Map from '../components/Map';
+import ComfortFeatures from '../components/ComfortFeatures';
 
 
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
                 <p className="text-center text-gray-600 mb-6">We’re right where you want to be - at the heart of the city!</p>
                 <Map />
             </section>
+            <ComfortFeatures></ComfortFeatures>
            
          
             
