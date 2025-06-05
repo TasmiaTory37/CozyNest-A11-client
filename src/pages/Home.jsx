@@ -2,6 +2,7 @@ import React from 'react';
 import Banner from '../components/Banner';
 import Map from '../components/Map';
 import ComfortFeatures from '../components/ComfortFeatures';
+import FAQ from '../components/FAQ';
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
                 <Map />
             </section>
             <ComfortFeatures></ComfortFeatures>
+            <FAQ></FAQ>
            
          
             
