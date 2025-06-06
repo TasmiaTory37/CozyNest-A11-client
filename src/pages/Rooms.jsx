@@ -36,7 +36,7 @@ const Rooms = () => {
           <div className="p-4">
             <h3 className="text-xl text-blue-500 font-semibold">{room.name}</h3>
             <p className="text-gray-500 mb-2">{room.description}</p>
-            <p className="text-sm text-red-500">৳ {room.pricePerDay} / night</p>
+            <p className="text-sm text-red-500">৳ {room.pricePerDay} / Day</p>
             <p className="text-sm text-yellow-500 flex items-center gap-1 mt-2">
               <FaStar className="text-yellow-400" /> {room.ratings}
             </p>
