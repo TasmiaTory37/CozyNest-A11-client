@@ -5,6 +5,7 @@ import ErrorPage from "../pages/ErrorPage";
 import Rooms from "../pages/Rooms";
 import AboutUs from "../pages/AboutUs";
 import Contact from "../pages/Contact";
+import RoomDetails from "../pages/RoomDetails";
 
 export const router=createBrowserRouter([
     {
@@ -30,6 +31,10 @@ export const router=createBrowserRouter([
             path:'/contact',
             Component: Contact,
         },
+        {
+            path:'/roomdetails/:id',
+            Component:RoomDetails,
+        }
 
     ]
 }
