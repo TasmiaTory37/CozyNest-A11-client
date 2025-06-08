@@ -44,9 +44,9 @@ const Navbar = () => {
                     )}
                 </ul>
                 </div>
-                <div className='flex items-center gap-2'>
-                    <img className='w-[50px] h-[50px]' src={logo} alt="" />
-                <Link to={'/'} className="text-xl">CozyNest</Link>
+                <div className='flex text-center gap-2'>
+                    <img className='w-[40px] h-[40px]' src={logo} alt="" />
+                <h1 className="text-blue-500 text-xl">CozyNest</h1>
                 </div>
             </div>
             <div className="navbar-center hidden lg:flex">

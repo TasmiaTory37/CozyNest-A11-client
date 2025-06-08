@@ -72,32 +72,34 @@ const MyBookings = () => {
       });
   };
 
-  const handleReviewSubmit = () => {
-    if (!rating || !comment) {
-      return Swal.fire('Error', 'Please add rating and comment.', 'error');
-    }
+const handleReviewSubmit = () => {
+  if (!rating || !comment) {
+    return Swal.fire('Error', 'Please add rating and comment.', 'error');
+  }
 
-    const review = {
-      roomId: reviewModal.roomId,
-      username: user.displayName,
-      rating,
-      comment,
-      timestamp: new Date().toISOString()
-    };
-
-    fetch(`http://localhost:3000/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(review)
-    })
-      .then(res => res.json())
-      .then(() => {
-        Swal.fire('Thanks!', 'Review submitted.', 'success');
-        setReviewModal(null);
-        setRating(0);
-        setComment("");
-      });
+  const review = {
+    roomId: reviewModal.roomId,
+    username: user.displayName,
+    photo: user.photoURL || '',
+    rating,
+    comment,
+    timestamp: new Date().toISOString()
   };
+
+  fetch(`http://localhost:3000/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(review)
+  })
+    .then(res => res.json())
+    .then(() => {
+      Swal.fire('Thanks!', 'Review submitted.', 'success');
+      setReviewModal(null);
+      setRating(0);
+      setComment("");
+    });
+};
+
 
   if (loading) {
     return (
