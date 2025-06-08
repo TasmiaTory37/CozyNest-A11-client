@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
-import { FaSpinner } from 'react-icons/fa'; // Spinner icon
+import { FaSpinner } from 'react-icons/fa';
 import 'react-datepicker/dist/react-datepicker.css';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const RoomDetails = () => {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
-  
   const [bookingDate, setBookingDate] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // Spinner state
+  const [loading, setLoading] = useState(true);
+
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    Promise.all([
-      fetch(`http://localhost:3000/rooms/${id}`).then(res => res.json()),
-      
-    ])
-      .then(([roomData, reviewData]) => {
-        setRoom(roomData);
-    
+    fetch(`http://localhost:3000/rooms/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setRoom(data);
         setLoading(false);
       })
       .catch(() => {
@@ -35,6 +35,11 @@ const RoomDetails = () => {
   }, [id]);
 
   const handleBooking = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     if (!bookingDate) {
       return Swal.fire({
         icon: 'warning',
@@ -48,11 +53,14 @@ const RoomDetails = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         roomId: id,
-        date: bookingDate.toISOString().split('T')[0]
+        date: bookingDate.toISOString().split('T')[0],
+        userEmail: user.email,
+        roomName: room.name,
+        img: room.img,
+        price: room.pricePerDay
       })
     });
 
- 
     if (response.ok) {
       Swal.fire({
         icon: 'success',
@@ -61,21 +69,20 @@ const RoomDetails = () => {
       });
       setModalOpen(false);
     } else {
+      const error = await response.json();
       Swal.fire({
         icon: 'error',
         title: 'Booking Failed',
-        text: 'Room already booked on this date. Please choose another date.'
+        text: error.message || 'Room already booked on this date.Please choose another date.'
       });
     }
   };
-
-  
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <FaSpinner className="animate-spin text-blue-600 text-4xl" />
-         <span className="ml-2 text-xl text-blue-500">Loading...</span>
+        <span className="ml-2 text-xl text-blue-500">Loading...</span>
       </div>
     );
   }
@@ -102,7 +109,16 @@ const RoomDetails = () => {
             ))}
           </ul>
 
-          <button className="btn bg-blue-500 text-white hover:bg-blue-600" onClick={() => setModalOpen(true)}>
+          <button
+            className="btn bg-blue-500 text-white hover:bg-blue-600"
+            onClick={() => {
+              if (!user) {
+                navigate('/login');
+              } else {
+                setModalOpen(true);
+              }
+            }}
+          >
             Book Now
           </button>
         </div>
@@ -115,16 +131,9 @@ const RoomDetails = () => {
             <h3 className="text-2xl font-semibold mb-4 text-blue-500">Confirm Your Booking</h3>
 
             <div className="space-y-3">
-              <div>
-                <span className="font-medium">Room:</span> {room.name}
-              </div>
-              <div>
-                <span className="font-medium">Price:</span> ৳ {room.pricePerDay} / Day
-              </div>
-              <div>
-                <span className="font-medium">Description:</span>
-                <p className="text-sm text-gray-600">{room.description}</p>
-              </div>
+              <div><span className="font-medium">Room:</span> {room.name}</div>
+              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}</div>
+              <div><span className="font-medium">Description:</span> {room.description}</div>
               <div>
                 <span className="font-medium">Features:</span>
                 <ul className="list-disc list-inside text-sm text-gray-600">
@@ -143,14 +152,12 @@ const RoomDetails = () => {
             </div>
 
             <div className="modal-action mt-6">
-              <button type="button" className="btn btn-outline bg-red-500 text-white" onClick={() => setModalOpen(false)}>Cancel</button>
-              <button type="button" className="btn btn-outline bg-blue-500 hover:bg-blue-600 text-white" onClick={handleBooking}>Confirm Booking</button>
+              <button type="button" className="btn bg-red-500 text-white" onClick={() => setModalOpen(false)}>Cancel</button>
+              <button type="button" className="btn bg-blue-500 text-white" onClick={handleBooking}>Confirm Booking</button>
             </div>
           </form>
         </dialog>
       )}
-
-   
     </div>
   );
 };
