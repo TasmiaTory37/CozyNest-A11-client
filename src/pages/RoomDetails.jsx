@@ -2,13 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import DatePicker from 'react-datepicker';
 import Swal from 'sweetalert2';
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner, FaStar } from 'react-icons/fa';
+import Rating from 'react-rating';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../Provider/AuthProvider';
 
 const RoomDetails = () => {
   const { id } = useParams();
   const [room, setRoom] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [bookingDate, setBookingDate] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,7 @@ const RoomDetails = () => {
 
   useEffect(() => {
     setLoading(true);
+    // fetch room details
     fetch(`http://localhost:3000/rooms/${id}`)
       .then(res => res.json())
       .then(data => {
@@ -26,27 +29,19 @@ const RoomDetails = () => {
       })
       .catch(() => {
         setLoading(false);
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed to load data',
-          text: 'Please try again later.',
-        });
+        Swal.fire({ icon: 'error', title: 'Failed to load data', text: 'Please try again later.' });
       });
+
+    // fetch reviews
+    fetch(`http://localhost:3000/rooms/${id}/reviews`)
+      .then(res => res.json())
+      .then(data => setReviews(data))
+      .catch(() => {});
   }, [id]);
 
   const handleBooking = async () => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
-    if (!bookingDate) {
-      return Swal.fire({
-        icon: 'warning',
-        title: 'Select a date',
-        text: 'Please select a booking date.'
-      });
-    }
+    if (!user) { navigate('/login'); return; }
+    if (!bookingDate) { return Swal.fire({ icon: 'warning', title: 'Select a date', text: 'Please select a booking date.' }); }
 
     const response = await fetch('http://localhost:3000/bookings', {
       method: 'POST',
@@ -62,19 +57,11 @@ const RoomDetails = () => {
     });
 
     if (response.ok) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Booking Confirmed',
-        text: 'Your booking was successful!'
-      });
+      Swal.fire({ icon: 'success', title: 'Booking Confirmed', text: 'Your booking was successful!' });
       setModalOpen(false);
     } else {
       const error = await response.json();
-      Swal.fire({
-        icon: 'error',
-        title: 'Booking Failed',
-        text: error.message || 'Room already booked on this date.Please choose another date.'
-      });
+      Swal.fire({ icon: 'error', title: 'Booking Failed', text: error.message || 'Room already booked on this date.' });
     }
   };
 
@@ -124,7 +111,33 @@ const RoomDetails = () => {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Reviews Section */}
+      <div className="mt-8">
+        <h3 className="text-2xl font-semibold mb-4 text-blue-500">Reviews</h3>
+        {reviews.length === 0 ? (
+          <p className="text-gray-500">No reviews yet. Be the first to review!</p>
+        ) : (
+          <ul className="space-y-6">
+            {reviews.map(r => (
+              <li key={r._id} className="border p-4 rounded">
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="font-medium">{r.username}</span>
+                  <Rating
+                    emptySymbol={<FaStar className="text-gray-300" />} 
+                    fullSymbol={<FaStar className="text-yellow-400" />} 
+                    initialRating={r.rating} 
+                    readonly
+                  />
+                </div>
+                <p className="mb-2">{r.comment}</p>
+                <small className="text-gray-500">{new Date(r.timestamp).toLocaleString()}</small>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Booking Modal */}
       {modalOpen && (
         <dialog id="booking_modal" className="modal modal-open">
           <form method="dialog" className="modal-box w-full max-w-3xl p-6">
