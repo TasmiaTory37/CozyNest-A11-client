@@ -171,7 +171,7 @@ const RoomDetails = () => {
             </h3>
             <div className="space-y-3">
               <div><span className="font-medium">Room:</span> {room.name}</div>
-              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}</div>
+              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}/Day</div>
               <div><span className="font-medium">Description:</span> {room.description}</div>
               <div>
                 <span className="font-medium">Features:</span>
