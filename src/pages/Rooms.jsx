@@ -46,8 +46,10 @@ const Rooms = () => {
 
   return (
     <div className="p-6 space-y-6">
+      <h1 className="text-3xl font-bold text-center text-blue-500 mb-4">All Rooms</h1>
+      <p className='text-center mb-10 text-gray-500'>Discover your perfect stay by browsing beautifully showcased rooms with images and real guest reviews—just one click away.</p>
       {/* Filter & Sort Controls */}
-      <form onSubmit={handleFilter} className="flex flex-wrap items-end gap-4 mb-6">
+      <form onSubmit={handleFilter} className="flex flex-wrap items-end gap-4 my-10">
         <div>
           <label className="block text-sm font-medium mb-1">Min Price</label>
           <input
@@ -104,9 +106,15 @@ const Rooms = () => {
                 <h3 className="text-xl text-blue-500 font-semibold">{room.name}</h3>
                 <p className="text-gray-500 mb-2">{room.description}</p>
                 <p className="text-sm text-red-500">৳ {room.pricePerDay} / Day</p>
+
                 <p className="text-sm text-yellow-500 flex items-center gap-1 mt-2">
                   <FaStar className="text-yellow-400" /> {room.ratings}
                 </p>
+                <p className="text-sm text-green-500 flex items-center gap-1 mt-2">
+            
+              {room.reviewCount || 0} review{room.reviewCount === 1 ? '' : 's'}
+            </p>
+
               </div>
             </div>
           ))}

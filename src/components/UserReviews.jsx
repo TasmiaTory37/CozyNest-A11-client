@@ -41,14 +41,21 @@ const UserReviews = () => {
           {reviews.map((review) => (
             <SwiperSlide key={review._id}>
               <div className="bg-cyan-50 shadow-xl p-8 flex flex-col items-center space-y-4">
-                <img
-                  src={review.photo}
-                  alt={review.username}
-                  className="w-20 h-20 rounded-full object-cover shadow-md"
-                />
-                <h3 className="text-xl font-semibold text-gray-700">
-                  {review.username}
-                </h3>
+               <img
+                src={review.photo || 'https://i.ibb.co/2FxS9T2/default-avatar.png'}
+                alt={review.username}
+                className="w-20 h-20 rounded-full object-cover shadow-md"
+                onError={(e) => { e.target.src = 'https://i.ibb.co/2FxS9T2/default-avatar.png'; }}
+                />      
+
+                <h3 className="text-xl font-semibold text-gray-700">{review.username}</h3>
+
+                {review.roomName && (
+                  <p className="text-sm text-blue-500">
+                    Reviewed: <span className="font-medium">{review.roomName}</span>
+                  </p>
+                )}
+
                 <Rating
                   initialRating={review.rating}
                   readonly

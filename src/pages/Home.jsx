@@ -4,6 +4,7 @@ import Map from '../components/Map';
 import ComfortFeatures from '../components/ComfortFeatures';
 import FAQ from '../components/FAQ';
 import UserReview from '../components/UserReviews';
+import FeaturedRooms from '../components/FeaturedRooms';
 
 
 const Home = () => {
@@ -15,6 +16,7 @@ const Home = () => {
                 <p className="text-center text-gray-600 mb-6">We’re right where you want to be - at the heart of the city!</p>
                 <Map />
             </section>
+            <FeaturedRooms></FeaturedRooms>
             <UserReview></UserReview>
             <ComfortFeatures></ComfortFeatures>
             <FAQ></FAQ>
