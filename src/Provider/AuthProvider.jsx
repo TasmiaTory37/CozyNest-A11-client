@@ -54,6 +54,7 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
       }
       setLoading(false);
+      console.log('User state changed:', currentUser);
     });
     return () => {
       unsubscribe();

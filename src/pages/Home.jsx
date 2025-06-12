@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Banner from '../components/Banner';
 import Map from '../components/Map';
 import ComfortFeatures from '../components/ComfortFeatures';
@@ -9,6 +9,9 @@ import SpecialOfferModal from '../components/SpecialOfferModal';
 
 
 const Home = () => {
+    useEffect(() => {
+             document.title = "CozyNest | Home"; 
+           }, []);
     return (
         <div>
             <SpecialOfferModal></SpecialOfferModal>

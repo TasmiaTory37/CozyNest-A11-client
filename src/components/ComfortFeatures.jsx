@@ -1,6 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaWifi, FaBell, FaSwimmingPool, FaDumbbell, FaShuttleVan, FaDog } from 'react-icons/fa';
+import { 
+  FaWifi, 
+  FaBell, 
+  FaSwimmingPool, 
+  FaDumbbell, 
+  FaShuttleVan, 
+  FaDog,
+  FaCoffee,
+  FaSoap
+} from 'react-icons/fa';
+import { GiSlicedBread } from "react-icons/gi";
+
 
 const ComfortFeatures = () => {
   return (
@@ -57,6 +68,30 @@ const ComfortFeatures = () => {
         >
           <FaDog className="text-3xl text-pink-500 mx-auto mb-2" />
           <h3 className="text-lg font-semibold">Pet-Friendly</h3>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="p-6 border border-blue-500 hover:bg-yellow-50 rounded-lg text-center shadow"
+        >
+          <FaCoffee className="text-3xl text-yellow-600 mx-auto mb-2" />
+          <h3 className="text-lg font-semibold">Coffee Shop</h3>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="p-6 border border-blue-500 hover:bg-lime-50 rounded-lg text-center shadow"
+        >
+          <GiSlicedBread  className="text-3xl text-amber-700 mx-auto mb-2" />
+          <h3 className="text-lg font-semibold">Free Breakfast</h3>
+        </motion.div>
+
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="p-6 border border-blue-500 hover:bg-rose-50 rounded-lg text-center shadow"
+        >
+          <FaSoap className="text-3xl text-rose-500 mx-auto mb-2" />
+          <h3 className="text-lg font-semibold">Toiletries & Personal Care</h3>
         </motion.div>
       </div>
     </section>

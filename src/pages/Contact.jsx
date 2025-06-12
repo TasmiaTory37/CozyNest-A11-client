@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Lottie from 'lottie-react';
 import contactAnimation from '../assets/lotties/contact.json'; // Make sure this path is correct
 
 const Contact = () => {
+  useEffect(() => {
+           document.title = "CozyNest | Contact"; 
+         }, []);
   return (
     <section className="py-10 px-4">
       <div className="max-w-3xl mx-auto text-center mb-12">

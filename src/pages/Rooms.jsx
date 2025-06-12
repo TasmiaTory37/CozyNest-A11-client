@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FaStar, FaSpinner } from 'react-icons/fa';
 
 const Rooms = () => {
+  useEffect(() => {
+           document.title = "CozyNest | All Rooms"; 
+         }, []);
+
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [minPrice, setMinPrice] = useState('');

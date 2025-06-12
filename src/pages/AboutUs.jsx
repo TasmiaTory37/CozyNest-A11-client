@@ -1,10 +1,13 @@
 // AboutUs.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Lottie from 'lottie-react';
 import about from '../assets/lotties/about.json';
 
 const AboutUs = () => {
+  useEffect(() => {
+           document.title = "CozyNest | About Us"; 
+         }, []);
   return (
     <section className="bg-gray-50 py-20 px-6 md:px-16 lg:px-32">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">

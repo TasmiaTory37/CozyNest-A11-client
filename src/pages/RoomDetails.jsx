@@ -8,6 +8,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../Provider/AuthProvider';
 
 const RoomDetails = () => {
+  useEffect(() => {
+           document.title = "CozyNest | Room Details"; 
+         }, []);
+
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -23,35 +27,26 @@ const RoomDetails = () => {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        // Fetch room, reviews, and bookings in parallel
         const [roomRes, reviewsRes, bookingsRes] = await Promise.all([
           fetch(`http://localhost:3000/rooms/${id}`),
           fetch(`http://localhost:3000/rooms/${id}/reviews`),
           fetch(`http://localhost:3000/rooms/${id}/bookings`)
         ]);
 
-        // Room data
         if (!roomRes.ok) throw new Error('Failed to load room');
         const roomData = await roomRes.json();
         setRoom(roomData);
 
-        // Reviews data (latest first)
         if (reviewsRes.ok) {
           const rev = await reviewsRes.json();
           rev.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          console.log('Fetched reviews:', rev);
           setReviews(rev);
-        } else {
-          console.error('Reviews fetch failed:', reviewsRes.status);
         }
 
-        // Bookings -> disable dates
         if (bookingsRes.ok) {
           const book = await bookingsRes.json();
           const dates = book.map(b => new Date(b.date + 'T00:00:00'));
           setBookedDates(dates);
-        } else {
-          console.error('Bookings fetch failed:', bookingsRes.status);
         }
       } catch (err) {
         console.error(err);
@@ -60,26 +55,32 @@ const RoomDetails = () => {
         setLoading(false);
       }
     };
-
     fetchAll();
   }, [id]);
 
   const handleBooking = async () => {
     if (!user) {
-      return navigate('/login');
+      navigate('/login');
+      return;
     }
     if (!bookingDate) {
-      return Swal.fire('Select a date', 'Please select a booking date.', 'warning');
+      Swal.fire('Select a date', 'Please select a booking date.', 'warning');
+      return;
     }
 
-    const iso = bookingDate.toISOString().split('T')[0];
+    // Build local YYYY-MM-DD without timezone shift
+    const year  = bookingDate.getFullYear();
+    const month = String(bookingDate.getMonth() + 1).padStart(2, '0');
+    const day   = String(bookingDate.getDate()).padStart(2, '0');
+    const localDate = `${year}-${month}-${day}`;
+
     try {
       const res = await fetch('http://localhost:3000/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           roomId: id,
-          date: iso,
+          date: localDate,
           userEmail: user.email,
           roomName: room.name,
           img: room.img,
@@ -101,19 +102,19 @@ const RoomDetails = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <FaSpinner className="animate-spin text-blue-600 text-4xl" />
-        <span className="ml-2 text-xl text-blue-500">Loading...</span>
       </div>
     );
   }
+
   return (
     <div className="max-w-5xl mx-auto p-4">
+      {/* Room Info */}
       <div className="grid md:grid-cols-2 gap-6 items-start">
         <img
           src={room.img}
           alt={room.name}
           className="w-full h-80 object-cover rounded-xl shadow"
         />
-
         <div>
           <h2 className="text-3xl font-bold mb-2 text-blue-500">{room.name}</h2>
           <p className="text-gray-600 mb-4">{room.description}</p>
@@ -122,9 +123,8 @@ const RoomDetails = () => {
           </p>
           <h4 className="font-semibold">Features:</h4>
           <ul className="list-disc list-inside text-gray-700 mb-4">
-            {room.features?.map((f, i) => <li key={i}>{f}</li>)}
+            {room.features?.map((f,i) => <li key={i}>{f}</li>)}
           </ul>
-
           <button
             className="btn bg-blue-500 text-white hover:bg-blue-600"
             onClick={() => user ? setModalOpen(true) : navigate('/login')}
@@ -138,11 +138,11 @@ const RoomDetails = () => {
       <div className="mt-8">
         <h3 className="text-2xl font-semibold mb-4 text-blue-500">Reviews</h3>
         {reviews.length === 0 ? (
-          <p className="text-red-500">No reviews yet. Be the first to review!</p>
+          <p className="text-gray-500">No reviews yet. Be the first to review!</p>
         ) : (
           <ul className="space-y-6">
             {reviews.map(r => (
-              <li key={r._id} className="border border-blue-300 p-4 rounded">
+              <li key={r._id} className="border p-4 rounded">
                 <div className="flex items-center space-x-2 mb-2">
                   <span className="font-medium">{r.username}</span>
                   <Rating
@@ -153,9 +153,7 @@ const RoomDetails = () => {
                   />
                 </div>
                 <p className="mb-2">{r.comment}</p>
-                <small className="text-gray-500">
-                  {new Date(r.timestamp).toLocaleString()}
-                </small>
+                <small className="text-gray-500">{new Date(r.timestamp).toLocaleString()}</small>
               </li>
             ))}
           </ul>
@@ -166,12 +164,10 @@ const RoomDetails = () => {
       {modalOpen && (
         <dialog id="booking_modal" className="modal modal-open">
           <form method="dialog" className="modal-box w-full max-w-3xl p-6">
-            <h3 className="text-2xl font-semibold mb-4 text-blue-500">
-              Confirm Your Booking
-            </h3>
+            <h3 className="text-2xl font-semibold mb-4 text-blue-500">Confirm Your Booking</h3>
             <div className="space-y-3">
               <div><span className="font-medium">Room:</span> {room.name}</div>
-              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}/Day</div>
+              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}</div>
               <div><span className="font-medium">Description:</span> {room.description}</div>
               <div>
                 <span className="font-medium">Features:</span>
@@ -191,20 +187,8 @@ const RoomDetails = () => {
               </div>
             </div>
             <div className="modal-action mt-6">
-              <button
-                type="button"
-                className="btn bg-red-500 text-white"
-                onClick={() => setModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn bg-blue-500 text-white"
-                onClick={handleBooking}
-              >
-                Confirm Booking
-              </button>
+              <button type="button" className="btn bg-red-500 text-white" onClick={() => setModalOpen(false)}>Cancel</button>
+              <button type="button" className="btn bg-blue-500 text-white" onClick={handleBooking}>Confirm Booking</button>
             </div>
           </form>
         </dialog>
