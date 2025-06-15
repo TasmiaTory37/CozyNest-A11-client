@@ -98,19 +98,26 @@ const Login = () => {
                         <label className="text-base">Email</label>
                         <input type="email" name='email' className="input" placeholder="Email" required/>
                         <div className="relative">
+
+
                         <label className="text-base fieldset">Password</label>
-                        
-                        <input type={showPassword ? 'text' : 'password'} name='pass' 
-                        placeholder="Password" 
-                        className="input" required />
-                        {/* eys */}
-                        <button
-                        onClick={()=>setShowPassword(!showPassword)}
-                        className='btn btn-xs absolute right-7 top-10'>
-                        {
-                        showPassword ?<FaEye></FaEye> :<FaEyeSlash></FaEyeSlash>
-                        }
-                        </button>
+                        <div className="relative w-full" style={{ overflow: 'visible' }}>
+                          <input
+                            type={showPassword ? 'text' : 'password'}
+                            name="pass"
+                            placeholder="Password"
+                            className="input pr-10"
+                            required
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="btn btn-xs absolute right-6 top-2.5  z-50"
+                          >
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                          </button>
+                        </div>
+
 
                         <label className="label">
                             <p  className="label text-red-500 mt-3 link link-hover">Forgot password?</p>

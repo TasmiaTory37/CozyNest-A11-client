@@ -13,7 +13,7 @@ const UserReviews = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/reviews")
+    fetch("https://assignment-11-server-nine-nu.vercel.app/reviews")
       .then((res) => res.json())
       .then((data) =>
         setReviews(
@@ -22,9 +22,10 @@ const UserReviews = () => {
       )
       .catch((err) => console.error("Error fetching reviews:", err));
   }, []);
+ 
 
   return (
-    <section className="py-16">
+    <section className="py-10 md:py-12 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 text-center">
         <div className="flex gap-5 items-center justify-center mb-5">
             <h2 className="text-4xl font-bold mb-10 text-blue-500">
@@ -41,7 +42,9 @@ const UserReviews = () => {
           {reviews.map((review) => (
             <SwiperSlide key={review._id}>
               <div className="bg-cyan-50 shadow-lg p-8 flex flex-col items-center space-y-4">
-              <img
+                
+
+              <img 
                 src={review.photo || `https://ui-avatars.com/api/?name=${review.username || 'Guest'}&background=random`}
                 alt={review.username}
                 className="w-20 h-20 rounded-full object-cover shadow-md"
@@ -49,6 +52,8 @@ const UserReviews = () => {
                   e.target.src = `https://ui-avatars.com/api/?name=Guest&background=random`;
                 }}
               />
+              
+
      
 
                 <h3 className="text-xl font-semibold text-gray-700">{review.username}</h3>

@@ -14,7 +14,7 @@ const Rooms = () => {
 
   const fetchRooms = () => {
     setLoading(true);
-    let url = 'http://localhost:3000/rooms';
+    let url = 'https://assignment-11-server-nine-nu.vercel.app/rooms';
     const params = [];
     if (minPrice) params.push(`minPrice=${minPrice}`);
     if (maxPrice) params.push(`maxPrice=${maxPrice}`);

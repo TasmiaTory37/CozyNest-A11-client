@@ -14,7 +14,7 @@ const Map = () => {
   const position = [40.73061, -73.935242]; 
 
   return (
-    <div className="w-full h-[400px] rounded-lg overflow-hidden shadow-lg">
+    <div className="w-full h-[400px] rounded-lg relative z-0 shadow-lg">
       <MapContainer
         center={position}
         zoom={13}

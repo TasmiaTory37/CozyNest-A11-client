@@ -6,13 +6,12 @@ import { AuthContext } from '../Provider/AuthProvider';
 import { FaSpinner } from 'react-icons/fa';
 import Rating from 'react-rating';
 import { FaStar } from 'react-icons/fa';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 
 const MyBookings = () => {
-  useEffect(() => {
-           document.title = "CozyNest | My Bookings"; 
-         }, []);
-         
-  const { user } = useContext(AuthContext);
+  const { user, token, loading: authLoading } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
+
   const [bookings, setBookings] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newDates, setNewDates] = useState({});
@@ -21,7 +20,10 @@ const MyBookings = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  // Updated: Only allow cancel if booking date is 2 or more days ahead of today
+  useEffect(() => {
+    document.title = "CozyNest | My Bookings";
+  }, []);
+
   const canCancelBooking = (bookingDateStr) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -29,19 +31,25 @@ const MyBookings = () => {
     bookingDate.setHours(0, 0, 0, 0);
     const diffTime = bookingDate - today;
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
-    return diffDays >= 2; // changed from >= 1 to >= 2
+    return diffDays >= 2;
   };
 
   useEffect(() => {
-    if (user?.email) {
-      fetch(`http://localhost:3000/bookings?email=${user.email}`)
-        .then(res => res.json())
-        .then(data => {
-          setBookings(data);
-          setLoading(false);
-        });
-    }
-  }, [user]);
+    if (authLoading || !user?.email || !token) return;
+
+    setLoading(true);
+    axiosSecure.get(`/bookings?email=${user.email}`)
+      .then(({ data }) => {
+        const bookingsArray = Array.isArray(data) ? data : data?.data || [];
+        setBookings(bookingsArray);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching bookings:", err);
+        setBookings([]);
+        setLoading(false);
+      });
+  }, [user, axiosSecure, authLoading, token]);
 
   const handleCancel = (id) => {
     Swal.fire({
@@ -52,11 +60,8 @@ const MyBookings = () => {
       confirmButtonText: 'Yes, cancel it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/bookings/${id}`, {
-          method: 'DELETE'
-        })
-          .then(res => res.json())
-          .then(data => {
+        axiosSecure.delete(`/bookings/${id}`)
+          .then(({ data }) => {
             if (data.error) {
               Swal.fire('Error', data.message || 'Cancellation not allowed.', 'error');
             } else {
@@ -79,12 +84,7 @@ const MyBookings = () => {
 
     const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
-    fetch(`http://localhost:3000/bookings/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date: formattedDate })
-    })
-      .then(res => res.json())
+    axiosSecure.patch(`/bookings/${id}`, { date: formattedDate })
       .then(() => {
         Swal.fire('Updated!', 'Booking date updated successfully.', 'success');
         setEditingId(null);
@@ -93,41 +93,50 @@ const MyBookings = () => {
           delete updated[id];
           return updated;
         });
-        fetch(`http://localhost:3000/bookings?email=${user.email}`)
-          .then(res => res.json())
-          .then(setBookings);
+
+        return axiosSecure.get(`/bookings?email=${user.email}`);
+      })
+      .then(({ data }) => {
+        const bookingsArray = Array.isArray(data) ? data : data?.data || [];
+        setBookings(bookingsArray);
+      })
+      .catch(err => {
+        Swal.fire('Error', 'Failed to update booking date.', 'error');
+        console.error(err);
       });
   };
 
   const handleReviewSubmit = () => {
+    
     if (!rating || !comment) {
       return Swal.fire('Error', 'Please add rating and comment.', 'error');
     }
+
     const review = {
+      
       roomId: reviewModal.roomId,
       roomName: reviewModal.roomName,
       username: user.displayName,
-      photo: user.photoURL || '',
+      photo: user.photoURL || '',   
+      userEmail: user.email, 
       rating,
       comment,
       timestamp: new Date().toISOString()
     };
 
-    fetch(`http://localhost:3000/reviews`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(review)
-    })
-      .then(res => res.json())
+    axiosSecure.post(`/reviews`, review)
       .then(() => {
         Swal.fire('Thanks!', 'Review submitted.', 'success');
         setReviewModal(null);
         setRating(0);
         setComment("");
+      })
+      .catch(() => {
+        Swal.fire('Error', 'Failed to submit review.', 'error');
       });
   };
-
-  if (loading) {
+  
+  if (authLoading || loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <FaSpinner className="animate-spin text-blue-600 text-4xl" />
@@ -139,91 +148,95 @@ const MyBookings = () => {
   return (
     <div className="max-w-6xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-6 text-blue-500">My Bookings</h2>
-      <div className="overflow-x-auto">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Room Name</th>
-              <th>Price</th>
-              <th>Booking Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((b) => (
-              <tr key={b._id}>
-                <td><img src={b.img} alt="Room" className="w-16 h-16 rounded" /></td>
-                <td>{b.roomName}</td>
-                <td>৳{b.price}</td>
-                <td>
-                  {editingId === b._id ? (
-                    <DatePicker
-                      selected={newDates[b._id] || new Date(b.date)}
-                      onChange={(date) =>
-                        setNewDates((prev) => ({ ...prev, [b._id]: date }))
-                      }
-                      minDate={new Date()}
-                      className="input input-sm input-bordered"
-                    />
-                  ) : (
-                    b.date
-                  )}
-                </td>
-                <td className="space-x-2">
-                  {editingId === b._id ? (
-                    <>
-                      <button
-                        onClick={() => handleUpdateDate(b._id)}
-                        className="btn btn-sm bg-green-500 text-white"
-                        disabled={!newDates[b._id]}
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setEditingId(null)}
-                        className="btn btn-sm bg-gray-500 text-white"
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => {
-                          setEditingId(b._id);
-                          setNewDates((prev) => ({ ...prev, [b._id]: new Date(b.date) }));
-                        }}
-                        className="btn btn-sm bg-blue-500 text-white"
-                      >
-                        Update Date
-                      </button>
-                      <button
-                        onClick={() => handleCancel(b._id)}
-                        className="btn btn-sm bg-red-500 text-white"
-                        disabled={!canCancelBooking(b.date)}
-                        title={
-                          canCancelBooking(b.date)
-                            ? 'Cancel booking'
-                            : 'Cancellation not allowed within 1 day of booking'
-                        }
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={() => setReviewModal(b)}
-                        className="btn btn-sm bg-green-500 text-white"
-                      >
-                        Review
-                      </button>
-                    </>
-                  )}
-                </td>
+      {bookings.length === 0 ? (
+        <p className="text-gray-600 text-center">You have no bookings yet.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Room Name</th>
+                <th>Price</th>
+                <th>Booking Date</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {bookings.map((b) => (
+                <tr key={b._id}>
+                  <td><img src={b.img} alt="Room" className="w-16 h-16 rounded" /></td>
+                  <td>{b.roomName}</td>
+                  <td>৳{b.price}</td>
+                  <td>
+                    {editingId === b._id ? (
+                      <DatePicker
+                        selected={newDates[b._id] || new Date(b.date)}
+                        onChange={(date) =>
+                          setNewDates((prev) => ({ ...prev, [b._id]: date }))
+                        }
+                        minDate={new Date()}
+                        className="input input-sm input-bordered"
+                      />
+                    ) : (
+                      b.date
+                    )}
+                  </td>
+                  <td className="space-x-2">
+                    {editingId === b._id ? (
+                      <>
+                        <button
+                          onClick={() => handleUpdateDate(b._id)}
+                          className="btn btn-sm bg-green-500 text-white"
+                          disabled={!newDates[b._id]}
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setEditingId(null)}
+                          className="btn btn-sm bg-gray-500 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => {
+                            setEditingId(b._id);
+                            setNewDates((prev) => ({ ...prev, [b._id]: new Date(b.date) }));
+                          }}
+                          className="btn btn-sm bg-blue-500 text-white"
+                        >
+                          Update Date
+                        </button>
+                        <button
+                          onClick={() => handleCancel(b._id)}
+                          className="btn btn-sm bg-red-500 text-white"
+                          disabled={!canCancelBooking(b.date)}
+                          title={
+                            canCancelBooking(b.date)
+                              ? 'Cancel booking'
+                              : 'Cancellation not allowed within 2 days of booking'
+                          }
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => setReviewModal(b)}
+                          className="btn btn-sm bg-green-500 text-white"
+                        >
+                          Review
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {reviewModal && (
         <dialog open className="modal modal-open">

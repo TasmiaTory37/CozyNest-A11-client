@@ -46,8 +46,8 @@ const Register = () => {
       return; 
     }
 
-    createNewUser(email, password)
-      .then((result) => {
+    createNewUser(email, password, name, photo)
+       .then((result) => {
         const user = result.user;
         setUser(user);
     //    console.log(user)
@@ -119,18 +119,26 @@ const Register = () => {
                                     <input type="text" name='url' className="input" placeholder="Photo Url" required />
                                     <label className="text-base">Email</label>
                                     <input type="email" name='email' className="input" placeholder="Email" required />  
+                                    
                                     <label className="text-base fieldset">Password</label>
-                                    <input type={showPassword ? 'text' : 'password'} name='pass' 
-                                    placeholder="Password" 
-                                    className="input" required />
-                                    {/* eys */}
-                                    <button
-                                    onClick={()=>setShowPassword(!showPassword)}
-                                    className='btn btn-xs absolute right-12 bottom-52'>
-                                    {
-                                    showPassword ?<FaEye></FaEye> :<FaEyeSlash></FaEyeSlash>
-                                    }
-                                    </button>
+                                    <div className="relative w-full" style={{ overflow: 'visible' }}>
+                                      <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="pass"
+                                        placeholder="Password"
+                                        className="input pr-10"
+                                        required
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="btn btn-xs absolute right-6 top-2.5  z-50"
+                                      >
+                                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                      </button>
+                                    </div>
+
+
                                     <button className="btn bg-blue-500 text-white mt-4">Register</button>
                                     <button onClick={handleGoogleLogin}  className='btn  mt-4 '><FaGoogle className='text-blue-800'></FaGoogle> Register With Google</button>
                                     <p className=' text-base'>Already have an Account? <Link className='text-blue-500 link link-hover' to="/auth/login">Login</Link>  </p>

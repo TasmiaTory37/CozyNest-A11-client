@@ -6,15 +6,17 @@ import { FaSpinner, FaStar } from 'react-icons/fa';
 import Rating from 'react-rating';
 import 'react-datepicker/dist/react-datepicker.css';
 import { AuthContext } from '../Provider/AuthProvider';
+import useAxiosSecure from '../hooks/useAxiosSecure';  
 
 const RoomDetails = () => {
   useEffect(() => {
-           document.title = "CozyNest | Room Details"; 
-         }, []);
+    document.title = "CozyNest | Room Details"; 
+  }, []);
 
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();  
 
   const [room, setRoom] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -28,9 +30,9 @@ const RoomDetails = () => {
       setLoading(true);
       try {
         const [roomRes, reviewsRes, bookingsRes] = await Promise.all([
-          fetch(`http://localhost:3000/rooms/${id}`),
-          fetch(`http://localhost:3000/rooms/${id}/reviews`),
-          fetch(`http://localhost:3000/rooms/${id}/bookings`)
+          fetch(`https://assignment-11-server-nine-nu.vercel.app/rooms/${id}`),
+          fetch(`https://assignment-11-server-nine-nu.vercel.app/rooms/${id}/reviews`),
+          fetch(`https://assignment-11-server-nine-nu.vercel.app/rooms/${id}/bookings`)
         ]);
 
         if (!roomRes.ok) throw new Error('Failed to load room');
@@ -75,26 +77,24 @@ const RoomDetails = () => {
     const localDate = `${year}-${month}-${day}`;
 
     try {
-      const res = await fetch('http://localhost:3000/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          roomId: id,
-          date: localDate,
-          userEmail: user.email,
-          roomName: room.name,
-          img: room.img,
-          price: room.pricePerDay
-        })
+      const { data } = await axiosSecure.post('/bookings', {
+        roomId: id,
+        date: localDate,
+        userEmail: user.email,
+        roomName: room.name,
+        img: room.img,
+        price: room.pricePerDay
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Booking failed');
 
-      Swal.fire('Success', 'Your booking was successful!', 'success');
+      Swal.fire('Success', data.message || 'Your booking was successful!', 'success');
       setModalOpen(false);
       setBookedDates(d => [...d, bookingDate]);
     } catch (err) {
-      Swal.fire('Booking Failed', err.message, 'error');
+      Swal.fire(
+        'Booking Failed',
+        err.response?.data?.message || err.message || 'Booking failed',
+        'error'
+      );
     }
   };
 
@@ -167,7 +167,7 @@ const RoomDetails = () => {
             <h3 className="text-2xl font-semibold mb-4 text-blue-500">Confirm Your Booking</h3>
             <div className="space-y-3">
               <div><span className="font-medium">Room:</span> {room.name}</div>
-              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}</div>
+              <div><span className="font-medium">Price:</span> ৳{room.pricePerDay}/Day</div>
               <div><span className="font-medium">Description:</span> {room.description}</div>
               <div>
                 <span className="font-medium">Features:</span>

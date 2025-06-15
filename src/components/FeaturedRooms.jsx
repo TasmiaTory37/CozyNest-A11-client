@@ -6,7 +6,7 @@ const FeaturedRooms = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  fetch('http://localhost:3000/featured-rooms')
+  fetch('https://assignment-11-server-nine-nu.vercel.app/featured-rooms')
     .then(res => {
       if (!res.ok) throw new Error(`Status ${res.status}`);
       return res.json();
@@ -38,7 +38,7 @@ const FeaturedRooms = () => {
       <h2 className="text-4xl font-bold text-center text-blue-500 mb-3 ">
         Featured Rooms
       </h2>
-      <p className='font-semibold text-lg text-center text-violet-400 mb-8'>Featured rooms are our top-rated accommodations, handpicked based on guest reviews and overall satisfaction.</p>
+      <p className='w-11/12 mx-auto font-semibold text-lg text-center text-violet-400 mb-8'>Featured rooms are our top-rated accommodations, handpicked based on guest reviews and overall satisfaction.</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
         {rooms.map(room => (
           <div
