@@ -7,7 +7,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile, // ✅ Added this line
+  updateProfile, 
 } from 'firebase/auth';
 import app from '../firebase/firebase.config';
 
@@ -20,13 +20,13 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
 
-  // ✅ Create new user with profile update
+  
   const createNewUser = async (email, password, name, photoURL) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // ✅ Update display name and photoURL
+    
       await updateProfile(user, {
         displayName: name,
         photoURL: photoURL,
@@ -74,23 +74,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // 🔄 Refresh token if user exists on page reload
-  useEffect(() => {
-    const refreshToken = async () => {
-      if (auth.currentUser) {
-        try {
-          const idToken = await auth.currentUser.getIdToken();
-          setToken(idToken);
-          setUser(auth.currentUser);
-        } catch (error) {
-          console.error("Error refreshing token on reload:", error);
-        }
-      }
-      setLoading(false);
-    };
 
-    refreshToken();
-  }, []);
 
   // Login with email/password
   const userLogin = async (email, password) => {
@@ -121,7 +105,7 @@ const AuthProvider = ({ children }) => {
     setUser,
     logOut,
     userLogin,
-    createNewUser, // ✅ Now expects: (email, password, name, photoURL)
+    createNewUser,
     handleGoogle,
   };
 

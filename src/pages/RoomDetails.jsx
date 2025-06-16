@@ -62,7 +62,7 @@ const RoomDetails = () => {
 
   const handleBooking = async () => {
     if (!user) {
-      navigate('/login');
+      navigate('/auth/login');
       return;
     }
     if (!bookingDate) {
@@ -70,7 +70,7 @@ const RoomDetails = () => {
       return;
     }
 
-    // Build local YYYY-MM-DD without timezone shift
+  
     const year  = bookingDate.getFullYear();
     const month = String(bookingDate.getMonth() + 1).padStart(2, '0');
     const day   = String(bookingDate.getDate()).padStart(2, '0');

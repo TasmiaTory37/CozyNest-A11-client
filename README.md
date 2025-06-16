@@ -1,12 +1,70 @@
-# React + Vite
+##  Name of the Project:  CozyNest
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CozyNest is a modern hotel booking platform designed to provide users with a seamless experience for browsing, booking, and managing hotel stays. With its secure authentication, interactive UI, and real-time features, CozyNest ensures both convenience and trust.
 
-Currently, two official plugins are available:
+##  Purpose of the Project:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The purpose of CozyNest is to simplify hotel room booking by offering:
 
-## Expanding the ESLint configuration
+- A user-friendly interface
+- Secure login and registration
+- Real-time room availability
+- Integrated booking and review systems
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Live URL :   https://cozynest-a11-ba172.web.app
+
+
+##  Key Features of the Project:
+
+- Firebase Authentication (email/password & Google login)
+- Hotel listings with filtering (price, rating, availability)
+- Booking with date validation
+- Submit and view user reviews with ratings
+- Interactive maps using Leaflet
+- Responsive layout for mobile,tablet and desktop
+- Carousel and animation integration for better UX
+
+## NPM Packages Used
+
+**Frontend**
+1.React Router
+
+2.Tailwind CSS 
+
+3.DaisyUI
+
+4.Axios 
+
+5.Firebase
+
+6.Framer Motion 
+
+7.React datepicker
+
+8.React icons
+
+9.React leaflet
+
+10.React ratting
+
+11.sweetalert2
+
+12.Swiper js
+
+
+
+**Backend**
+
+1.Express.js 
+
+2.MongoDB 
+
+3.dotenv 
+
+4.cors
+
+5.Firebase admin
+
+6.Moment js
+

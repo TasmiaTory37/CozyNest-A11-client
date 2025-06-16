@@ -1,17 +1,10 @@
-import React, { useContext, useState, } from 'react';
-import { NavLink,Link, useNavigate } from 'react-router'
+import React, { useContext} from 'react';
+import { NavLink,Link} from 'react-router'
 import logo from '../assets/logo.png'
 import { AuthContext } from '../Provider/AuthProvider';
 
 const Navbar = () => {
   const {user,logOut}=useContext(AuthContext); 
-  const navigate = useNavigate();
-  const handleLogout = async () => {
-    await logOut();
-    navigate('/');
-  };
-
-
 
     return (
       
@@ -101,11 +94,11 @@ const Navbar = () => {
           </div>
                 </label>
                 {user && user?.email ? (
-          <button onClick={handleLogout } className="btn bg-blue-500 text-white hover:bg-blue-600 rounded-none">
+          <button onClick={logOut} className="btn bg-blue-500 text-white hover:bg-blue-600 rounded-none">
             Logout
           </button>
         ) : (
-          <Link to="/auth/login" className="btn bg-blue-500 text-white hover:bg-blue-600 rounded-none">
+          <Link to="/login" className="btn bg-blue-500 text-white hover:bg-blue-600 rounded-none">
             Login
           </Link>
         )}

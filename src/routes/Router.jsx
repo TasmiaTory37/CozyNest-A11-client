@@ -10,6 +10,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import AuthLayout from "../layouts/AuthLayout";
 import MyBookings from "../pages/MyBookings";
+import PrivateRoute from "./PrivateRoute";
 
 export const router=createBrowserRouter([
     {
@@ -73,7 +74,7 @@ export const router=createBrowserRouter([
             },
             {
                 path:'/auth/my-bookings',
-                element:<MyBookings></MyBookings>
+                element:<PrivateRoute><MyBookings></MyBookings></PrivateRoute>
             },
            
           ]

@@ -52,7 +52,7 @@ const Rooms = () => {
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold text-center text-blue-500 mb-4">All Rooms</h1>
       <p className='text-center mb-10 text-gray-500'>Discover your perfect stay by browsing beautifully showcased rooms with images and real guest reviews—just one click away.</p>
-      {/* Filter & Sort Controls */}
+      {/* Filter & Sort  */}
       <form onSubmit={handleFilter} className="flex flex-wrap items-end gap-4 my-10">
         <div>
           <label className="block text-sm font-medium mb-1">Min Price</label>
@@ -92,7 +92,7 @@ const Rooms = () => {
         </div>
       </form>
 
-      {/* Rooms Grid or No Results */}
+      {/* If No Rooms */}
       {rooms.length === 0 ? (
         <p className="text-center font-semibold text-red-500">
           No rooms available in this price range, please select another price range.

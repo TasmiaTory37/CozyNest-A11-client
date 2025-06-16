@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Lottie from 'lottie-react';
-import contactAnimation from '../assets/lotties/contact.json'; // Make sure this path is correct
+import contactAnimation from '../assets/lotties/contact.json'; 
 
 const Contact = () => {
   useEffect(() => {
