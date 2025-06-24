@@ -102,7 +102,7 @@ The purpose of CozyNest is to simplify hotel room booking by offering:
 
 ## Clone the repository
 
-git clone https://github.com/yourusername/cozynest.git
+git clone https://github.com/TasmiaTory37/CozyNest-A11-client.git
 
 cd cozynest
 
