@@ -77,7 +77,7 @@ The purpose of CozyNest is to simplify hotel room booking by offering:
 
 ## Dependencies
 
-"@tailwindcss/vite": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.9.0",
     "firebase": "^11.9.0",
     "framer-motion": "^12.16.0",
@@ -96,3 +96,18 @@ The purpose of CozyNest is to simplify hotel room booking by offering:
     "sweetalert2": "^11.22.0",
     "swiper": "^11.2.8",
     "tailwindcss": "^4.1.8"
+
+
+## How to use
+
+# Clone the repository
+
+git clone https://github.com/yourusername/cozynest.git
+
+cd cozynest
+
+# Install frontend dependencies
+npm install
+
+# Start the development server
+npm run dev
