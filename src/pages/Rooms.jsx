@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaStar, FaSpinner } from 'react-icons/fa';
+import { Link } from 'react-router';
 
 const Rooms = () => {
   useEffect(() => {
@@ -103,8 +104,9 @@ const Rooms = () => {
             <div
               key={room._id}
               className="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition-all cursor-pointer"
-              onClick={() => window.location.href = `/roomdetails/${room._id}`}
+              // onClick={() => window.location.href = `/roomdetails/${room._id}`}
             >
+              <Link to={`/roomdetails/${room._id}`} >
               <img src={room.img} alt={room.name} className="w-full h-48 object-cover" />
               <div className="p-4">
                 <h3 className="text-xl text-blue-500 font-semibold">{room.name}</h3>
@@ -120,6 +122,7 @@ const Rooms = () => {
             </p>
 
               </div>
+              </Link>
             </div>
           ))}
         </div>

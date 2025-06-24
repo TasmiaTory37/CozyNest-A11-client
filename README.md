@@ -2,6 +2,11 @@
 
 CozyNest is a modern hotel booking platform designed to provide users with a seamless experience for browsing, booking, and managing hotel stays. With its secure authentication, interactive UI, and real-time features, CozyNest ensures both convenience and trust.
 
+
+![Project Screenshot](./src/assets/Screenshot%202025-06-25%20030650.png)
+
+
+
 ##  Purpose of the Project:
 
 The purpose of CozyNest is to simplify hotel room booking by offering:
@@ -68,3 +73,26 @@ The purpose of CozyNest is to simplify hotel room booking by offering:
 
 6.Moment js
 
+
+
+## Dependencies
+
+"@tailwindcss/vite": "^4.1.8",
+    "axios": "^1.9.0",
+    "firebase": "^11.9.0",
+    "framer-motion": "^12.16.0",
+    "leaflet": "^1.9.4",
+    "lottie-react": "^2.4.1",
+    "react": "^19.1.0",
+    "react-countup": "^6.5.3",
+    "react-datepicker": "^8.4.0",
+    "react-dom": "^19.1.0",
+    "react-icons": "^5.5.0",
+    "react-leaflet": "^5.0.0",
+    "react-rating": "^2.0.5",
+    "react-rating-stars-component": "^2.2.0",
+    "react-router": "^7.6.2",
+    "react-simple-star-rating": "^5.1.7",
+    "sweetalert2": "^11.22.0",
+    "swiper": "^11.2.8",
+    "tailwindcss": "^4.1.8"
