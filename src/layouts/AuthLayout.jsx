@@ -4,10 +4,14 @@ import { Outlet } from 'react-router';
 
 const AuthLayout = () => {
     return (
-        <div>
+        <div className='bg-blue-50 min-h-screen'>
              
-             <Navbar />
-            <div  className='my-5'>
+            <div className='sticky top-0 z-50'> 
+                 <Navbar/>
+            </div>
+            <div  className='min-h-screen
+            max-w-7xl mx-auto p-8'>
+               
                
                 <Outlet />
             </div>

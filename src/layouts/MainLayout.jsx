@@ -5,13 +5,13 @@ import Footer from '../components/Footer';
 
 const MainLayout = () => {
     return (
-        <div>
-             <nav>
+        <div className='bg-blue-50 min-h-screen'>
+             <nav className='sticky top-0 z-50'>
                 <Navbar></Navbar>
                 
             </nav>
 
-            <section>
+            <section className='min-h-screen'>
                <Outlet></Outlet>
             </section>
             

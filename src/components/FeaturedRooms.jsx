@@ -6,44 +6,43 @@ const FeaturedRooms = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  fetch('https://assignment-11-server-nine-nu.vercel.app/featured-rooms')
-    .then(res => {
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      setRooms(data);
-      setLoading(false); 
-    })
-    .catch(err => {
-      console.error('Error fetching featured rooms:', err);
-      setLoading(false); 
-    });
-}, []);
+    fetch('https://assignment-11-server-nine-nu.vercel.app/featured-rooms')
+      .then(res => {
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        setRooms(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching featured rooms:', err);
+        setLoading(false);
+      });
+  }, []);
 
-
-    if (loading) {
-      return (
-        <div className="flex justify-center items-center h-64">
-          <FaSpinner className="animate-spin text-blue-600 text-4xl" />
-          <span className="ml-2 text-xl text-blue-500">Loading...</span>
-        </div>
-      );
-    }
-  
-
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <FaSpinner className="animate-spin text-blue-600 text-4xl" />
+        <span className="ml-2 text-xl text-blue-500">Loading...</span>
+      </div>
+    );
+  }
 
   return (
-    <section className="my-20">
-      <h2 className="text-4xl font-bold text-center text-blue-500 mb-3 ">
+    <section className="max-w-7xl mx-auto p-8 ">
+      <h2 className="text-4xl font-bold text-center text-blue-500 mb-3">
         Featured Rooms
       </h2>
-      <p className='w-11/12 mx-auto font-semibold text-lg text-center text-violet-400 mb-8'>Featured rooms are our top-rated accommodations, handpicked based on guest reviews and overall satisfaction.</p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+      <p className="text-lg text-center mb-8">
+        Featured rooms are our top-rated accommodations, handpicked based on guest reviews and overall satisfaction.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {rooms.map(room => (
           <div
             key={room._id}
-            className="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col"
+            className="bg-white shadow-lg rounded-xl overflow-hidden flex flex-col h-full"
           >
             <img
               src={room.img}
@@ -55,7 +54,6 @@ const FeaturedRooms = () => {
                 {room.name}
               </h3>
 
-              {/* Display review count */}
               <div className="flex items-center mb-2">
                 <FaStar className="text-yellow-400" />
                 <span className="ml-1 text-gray-700">
@@ -68,11 +66,14 @@ const FeaturedRooms = () => {
                   ? room.description.slice(0, 100) + '…'
                   : room.description}
               </p>
-                <p className="text-lg font-semibold text-red-500 mb-4">
-                    ৳{room.pricePerDay} / Day </p>
+
+              <p className="text-lg font-semibold text-red-500 mb-4">
+                ৳{room.pricePerDay} / Day
+              </p>
+
               <button
                 onClick={() => window.location.href = `/roomdetails/${room._id}`}
-                className="btn bg-blue-500 text-white mt-auto"
+                className="btn bg-blue-500 text-white hover:bg-blue-600  mt-auto"
               >
                 Book Now
               </button>

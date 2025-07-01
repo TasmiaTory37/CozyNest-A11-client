@@ -42,7 +42,7 @@ const Rooms = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center min-h-screen">
         <FaSpinner className="animate-spin text-4xl text-blue-500" />
         <span className="ml-2 text-xl text-blue-500">Loading...</span>
       </div>
@@ -50,7 +50,7 @@ const Rooms = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="max-w-7xl mx-auto p-8">
       <h1 className="text-3xl font-bold text-center text-blue-500 mb-4">All Rooms</h1>
       <p className='text-center mb-10 text-gray-500'>Discover your perfect stay by browsing beautifully showcased rooms with images and real guest reviews—just one click away.</p>
       {/* Filter & Sort  */}

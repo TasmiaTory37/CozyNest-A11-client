@@ -9,7 +9,9 @@ const Navbar = () => {
     return (
       
         <div >
-            <div className="navbar pt-5 justify-between items-center">
+           <div className="bg-white w-full shadow">
+      <div className="navbar max-w-7xl mx-auto px-5 md:px-10 justify-between items-center">
+        
   <div className="navbar-start justify-start items-center">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -106,6 +108,8 @@ const Navbar = () => {
             
         </div>
         </div>
+      </div>
+    
     );
 };
 
