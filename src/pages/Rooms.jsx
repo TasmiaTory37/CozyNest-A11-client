@@ -99,7 +99,7 @@ const Rooms = () => {
           No rooms available in this price range, please select another price range.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {rooms.map(room => (
             <div
               key={room._id}
