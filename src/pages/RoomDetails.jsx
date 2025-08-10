@@ -119,7 +119,7 @@ const RoomDetails = () => {
           <h2 className="text-3xl font-bold mb-2 text-blue-500">{room.name}</h2>
           <p className="text-gray-600 mb-4">{room.description}</p>
           <p className="text-lg font-semibold mb-2">
-            Price per day: <span className="text-green-600">৳{room.pricePerDay}</span>
+            Price per day: <span className="">৳{room.pricePerDay}</span>
           </p>
           <h4 className="font-semibold">Features:</h4>
           <ul className="list-disc list-inside text-gray-700 mb-4">
