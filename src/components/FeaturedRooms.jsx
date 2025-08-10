@@ -75,7 +75,7 @@ const FeaturedRooms = () => {
                 onClick={() => window.location.href = `/roomdetails/${room._id}`}
                 className="btn bg-blue-500 text-white hover:bg-blue-600  mt-auto"
               >
-                View More
+                See More
               </button>
             </div>
           </div>
