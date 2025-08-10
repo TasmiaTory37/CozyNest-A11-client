@@ -67,7 +67,7 @@ const FeaturedRooms = () => {
                   : room.description}
               </p>
 
-              <p className="text-lg font-semibold text-red-500 mb-4">
+              <p className="text-lg font-semibold text-gray-600 mb-4">
                 ৳{room.pricePerDay} / Day
               </p>
 
@@ -75,7 +75,7 @@ const FeaturedRooms = () => {
                 onClick={() => window.location.href = `/roomdetails/${room._id}`}
                 className="btn bg-blue-500 text-white hover:bg-blue-600  mt-auto"
               >
-                Book Now
+                View More
               </button>
             </div>
           </div>
