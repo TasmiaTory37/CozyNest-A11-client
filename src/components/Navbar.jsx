@@ -9,7 +9,7 @@ const Navbar = () => {
     return (
       
         <div >
-           <div className="bg-white w-full shadow">
+           <div className="bg-blue-50 w-full shadow ">
       <div className="navbar max-w-7xl mx-auto px-5 md:px-10 justify-between items-center">
         
   <div className="navbar-start justify-start items-center">
