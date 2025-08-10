@@ -44,7 +44,7 @@ const UserReviews = () => {
           >
             {reviews.map((review) => (
               <SwiperSlide key={review._id}>
-                <div className="bg-cyan-50 shadow-lg p-8 flex flex-col items-center space-y-4">
+                <div className=" shadow-lg p-6 flex flex-col items-center ">
                   <img
                     src={
                       review.photo ||
